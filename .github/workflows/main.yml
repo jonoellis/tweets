@@ -1,0 +1,29 @@
+name: Publish page
+
+on:
+  push:
+    branches: [ "main" ] # Change this to the name of the main branch of your repository
+  workflow_dispatch: # Setting this enables the possibility to run the workflow manually
+
+jobs:
+  build:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+            node-version: 18.x
+      - run: npm ci # Note that you must commit the package-lock.json to the repo and quit it from the .gitignore file
+      - run: npm run build
+      - name: Deploy to Github Pages
+        uses: crazy-max/ghaction-github-pages@v3
+        with:
+          # Build directory to deploy
+          build_dir: _site
+          # Write the given domain name to the CNAME file
+          fqdn: tweets.piraces.dev # Change this to your configured subdomain or completely delete the line if not using it.
+          jekyll: false
+          keep_history: true # If you don't want to preserve a commit history, set to false to perform a git push --force
+        env:
+            GITHUB_TOKEN: $ # This secret is available by default
