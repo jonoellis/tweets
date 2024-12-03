@@ -2,7 +2,8 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - main  # or your default branch name
+      - main
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
